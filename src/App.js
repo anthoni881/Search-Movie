@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useReducer } from "react";
+import { Switch, Route, BrowserRouter } from "react-router-dom";
+import Detail from "./Pages/Detail";
+import Home from "./Pages/Home";
+import { AppProvider } from "./Providers/AppProvider";
+import { appReducer, initialState } from "./Reducers/AppReducer";
+import Loader from "./Components/Loader";
 
-function App() {
+const App = () => {
+  const state = useReducer(appReducer, initialState);
+  const { isLoading } = state[0];
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Loader isLoading={isLoading} />
+      <AppProvider value={state}>
+        <Switch>
+          <Route path="/" component={Home} exact />
+          <Route path="/:title" component={Home} exact />
+          <Route path="/detail/:movieId" component={Detail} />
+        </Switch>
+      </AppProvider>
+    </BrowserRouter>
   );
-}
-
+};
 export default App;
